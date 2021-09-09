@@ -9,7 +9,8 @@ import useStyles from "./FormStyle";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
+import { Grid } from "@material-ui/core";
+import { useState } from "react";
 const LiftPosting = ({ user, name, colorMode, feedUpdate, setFeedUpdate }) => {
   const schema = yup.object().shape({
     description: yup.string(),
@@ -18,7 +19,7 @@ const LiftPosting = ({ user, name, colorMode, feedUpdate, setFeedUpdate }) => {
     reps: yup.number().typeError("Must be digits").required().max(99),
     rpe: yup.number().typeError("Must be Digits").required(),
   });
-
+  const [displayPost, setDisplayPost] = useState(false);
   const {
     register,
     control,
@@ -43,103 +44,109 @@ const LiftPosting = ({ user, name, colorMode, feedUpdate, setFeedUpdate }) => {
       styles={{
         backgroundColor: `${colorMode === "dark" ? "#232526" : "white"}`,
       }}
+      className={classes.root}
     >
-      <div
-        styles={{
-          backgroundColor: `${colorMode === "dark" ? "#232526" : "white"}`,
-        }}
-        className={classes.root}
-      >
+      <Grid container>
         <form>
-          <TextField
-            color="primary"
-            required
-            fullWidth
-            rows={6}
-            id="description"
-            name="description"
-            placeholder="Lift description (Optional)"
-            {...register("description")}
-            multiline
-            style={{ marginBottom: 15 }}
-            margin="normal"
-            InputProps={{
-              shrink: true,
-              className: classes.input,
-            }}
-          />
-
-          <TextField
-            variant="outlined"
-            {...register("liftName")}
-            label="Lift name"
-            error={errors.liftName ? true : false}
-            className={classes.textBox}
-            helperText={errors.liftName?.message}
-            InputProps={{
-              className: classes.input,
-            }}
-            InputLabelProps={{
-              className: classes.input,
-            }}
-          />
-
-          <TextField
-            {...register("weight")}
-            error={errors.weight ? true : false}
-            className={classes.textField}
-            variant="outlined"
-            helperText={errors.weight?.message}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">Lb</InputAdornment>,
-            }}
-            InputLabelProps={{
-              className: classes.input,
-            }}
-          />
-
-          <TextField
-            {...register("reps")}
-            className={classes.textField}
-            error={errors.reps ? true : false}
-            variant="outlined"
-            helperText={errors.reps?.message}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">Reps</InputAdornment>
-              ),
-            }}
-            InputLabelProps={{
-              className: classes.input,
-            }}
-          />
-          <TextField
-            variant="outlined"
-            {...register("rpe")}
-            inputText
-            className={classes.textEnd}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">RPE</InputAdornment>,
-            }}
-            error={errors.rpe ? true : false}
-            helperText={errors.rpe?.message}
-          />
-          <div className="right-align">
-            <Button
-              size="large"
-              variant="contained"
+          <Grid item xs={12}>
+            <TextField
+              onClick={() => setDisplayPost(true)}
               color="primary"
-              className={classes.button}
-              endIcon={<Icon>send</Icon>}
-              onClick={handleSubmit(onSubmit)}
-            >
-              {" "}
-              Post
-            </Button>
-          </div>
+              required
+              fullWidth
+              rows={6}
+              id="description"
+              name="description"
+              placeholder="Lift description (Optional)"
+              {...register("description")}
+              multiline
+              style={{ marginBottom: 15 }}
+              margin="normal"
+              InputProps={{
+                shrink: true,
+                className: classes.input,
+              }}
+            />
+          </Grid>
+          {displayPost === true ? (
+            <div>
+              <TextField
+                variant="outlined"
+                {...register("liftName")}
+                label="Lift name"
+                error={errors.liftName ? true : false}
+                className={classes.textBox}
+                helperText={errors.liftName?.message}
+                InputProps={{
+                  className: classes.input,
+                }}
+                InputLabelProps={{
+                  className: classes.input,
+                }}
+              />
+
+              <TextField
+                {...register("weight")}
+                error={errors.weight ? true : false}
+                className={classes.textField}
+                variant="outlined"
+                helperText={errors.weight?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">Lb</InputAdornment>
+                  ),
+                }}
+                InputLabelProps={{
+                  className: classes.input,
+                }}
+              />
+
+              <TextField
+                {...register("reps")}
+                className={classes.textField}
+                error={errors.reps ? true : false}
+                variant="outlined"
+                helperText={errors.reps?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">Reps</InputAdornment>
+                  ),
+                }}
+                InputLabelProps={{
+                  className: classes.input,
+                }}
+              />
+              <TextField
+                variant="outlined"
+                {...register("rpe")}
+                inputText
+                className={classes.textEnd}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">RPE</InputAdornment>
+                  ),
+                }}
+                error={errors.rpe ? true : false}
+                helperText={errors.rpe?.message}
+              />
+              <div className="right-align">
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  endIcon={<Icon>send</Icon>}
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  Post
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
         </form>
-      </div>
-      {}
+      </Grid>
     </div>
   );
 };

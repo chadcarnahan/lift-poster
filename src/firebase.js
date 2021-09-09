@@ -1,7 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import { getDatabase, ref, onValue } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDkpbaWzNtQdice2gpNZO2I0oUJO0kBBvM",
@@ -135,23 +134,6 @@ const fetchPosts = async (setData, setLoad) => {
   }
 };
 
-const fetcherPosts = async (user, updateFeed, postData) => {
-  var docRef = db.collection("posts");
-  docRef
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        console.log("Document data:", docRef.doc.data());
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
-    })
-    .catch((error) => {
-      console.log("Error getting document:", error);
-    });
-};
-
 export {
   auth,
   db,
@@ -162,6 +144,5 @@ export {
   logout,
   fetchUserName,
   newPost,
-  fetcherPosts,
   fetchPosts,
 };

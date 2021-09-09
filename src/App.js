@@ -4,8 +4,6 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Reset from "./auth/Reset";
 import Dashboard from "./Dashboard";
-import { useState, useEffect } from "react";
-import { fetchPosts } from "./firebase";
 
 function App() {
   return (

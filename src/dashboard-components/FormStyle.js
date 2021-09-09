@@ -6,8 +6,8 @@ const useStyles = makeStyles((theme, colorMode) => ({
     display: "flex",
     flexWrap: "wrap",
     border: "1px RGB(149, 152, 157, 0.25)solid",
-    width: "600px",
     padding: "20px",
+    color: theme.palette.text.secondary,
     justifyContent: "center",
     "& .MuiInputBase-root": {
       height: 50,

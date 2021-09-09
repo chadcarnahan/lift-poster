@@ -9,6 +9,8 @@ import { CssBaseline } from "@material-ui/core";
 import LiftPosting from "./dashboard-components/LiftPosting";
 import Feed from "./dashboard-components/Feed";
 import { fetchPosts } from "./firebase";
+import { Grid, AppBar, Toolbar } from "@material-ui/core";
+import { makeStyles, IconButton, Typography, Button } from "@material-ui/core";
 
 function Dashboard() {
   const [fontColor, setFontColor] = useState("#B0B3B8");
@@ -29,6 +31,21 @@ function Dashboard() {
     await fetchPosts(setData, setLoad);
   };
 
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
+      display: "flex",
+      justifyContent: "flex-end",
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
+  }));
+
+  const classes = useStyles();
   useEffect(() => {
     if (loading) return;
     if (!user) return history.replace("/");
@@ -38,10 +55,35 @@ function Dashboard() {
   if (!loading) {
     return (
       <ThemeProvider theme={theme}>
-        <div className="container">
-          <div class="center">
-            <CssBaseline />
+        <AppBar position="static" className={classes.root}>
+          <Toolbar>
+            <Button onClick={() => logout} color="inherit">
+              Logout
+            </Button>
+            <Button
+              onClick={() =>
+                colorMode === "dark"
+                  ? setColorMode("light")
+                  : setColorMode("dark")
+              }
+              color="inherit"
+            >
+              {" "}
+              Dark Mode
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CssBaseline />
+          <Grid item>
             <h2>Home</h2>
+          </Grid>
+          <Grid item xs={8}>
             <LiftPosting
               user={user}
               name={name.name}
@@ -50,11 +92,17 @@ function Dashboard() {
               feedUpdate={feedUpdate}
               setFeedUpdate={setFeedUpdate}
             />
+          </Grid>
+          <Grid item xs={4}>
+            <h2>News Feed</h2>
+          </Grid>
+          <Grid item xs={12}>
             <Feed user={user} data={data} load={load} />
-            {/* <button className="dashboard__btn" onClick={logout}>
+          </Grid>
+          {/* <button className="dashboard__btn" onClick={logout}>
           Logout
         </button> */}
-            {/* <button
+          {/* <button
               className="btn"
               onClick={() =>
                 colorMode === "dark"
@@ -64,8 +112,7 @@ function Dashboard() {
             >
               change theme
             </button> */}
-          </div>
-        </div>
+        </Grid>
       </ThemeProvider>
     );
   } else {

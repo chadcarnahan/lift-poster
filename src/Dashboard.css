@@ -17,13 +17,10 @@
 }
 
 .container {
-  display: flex;
-  justify-content: center;
+  width: 70%;
 }
 .center {
-  display: flex;
-  flex-direction: column;
-  border: 1px RGB(149, 152, 157, 0.25) solid;
+  width: 50%;
 }
 
 .center h2 {
