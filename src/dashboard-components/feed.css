@@ -1,0 +1,16 @@
+.feed {
+  display: flex;
+  justify-content: center;
+}
+
+.post {
+  display: flex;
+  background-color: grey;
+  margin-bottom: 10px;
+  width: 95%;
+}
+
+.field {
+  margin-left: 5px;
+  border-radius: 25px;
+}
