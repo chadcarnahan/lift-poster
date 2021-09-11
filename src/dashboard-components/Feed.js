@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Container, Grid, Typography, Avatar } from "@material-ui/core";
+import { Container, Grid, Typography, Avatar, Box } from "@material-ui/core";
 import { Paper, Card, CardContent, CardHeader } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import defaultpic from "../defaultpic.jpeg";
@@ -11,40 +11,41 @@ const Feed = ({ user, data, load, loading }) => {
     root: {
       color: theme.palette.text.secondary,
       flexGrow: 1,
+      alignItems: "center",
+      justifyContent: "center",
     },
 
-    card: {
-      display: "flex",
-
-      flexDirection: "column",
-      padding: "10px",
-      width: "100%",
-    },
     name: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "flex-start",
-      marginRight: "5px",
-      fontSize: "10px",
+      alignContent: "center",
+      paddingRight: "10px",
+      fontSize: "20px",
     },
-    space: {
-      marginRight: "8px",
-    },
+
     details: {
       display: "flex",
       flexDirection: "column",
-      padding: "10px",
-      textAlign: "center",
       justifyContent: "center",
-      backgroundColor: "#BC4639",
-      height: "50px",
-      marginRight: "10px",
-      minWidth: "70px",
-      width: "auto",
-      borderRadius: "25px",
+      paddingLeft: "8px",
+      paddingRight: "10px",
     },
     container: {
       display: "flex",
+      paddingLeft: "10px",
+    },
+    header: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-start",
+    },
+    box: {
+      width: "100%",
+      padding: "12px",
+      justifyContent: "center",
+
+      border: "1px RGB(149, 152, 157, 0.25)solid",
     },
   }));
   const classes = useStyles();
@@ -56,64 +57,45 @@ const Feed = ({ user, data, load, loading }) => {
     return <h1>loading</h1>;
   } else {
     return (
-      <Grid container spacing={1} alignItems="center" justifyContent="center">
-        <Grid item xs={12} className={classes.gridItem}>
-          {data.map((item) => {
-            return (
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Card variant="outlined" className={classes.card}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12}>
-                        <CardContent className={classes.name}>
-                          <Avatar imgProps={defaultpic}></Avatar>
-                          <Container>
-                            <Typography variant="h6">{item.name}: </Typography>
-                            <Typography variant="subtitle1">
-                              5h ago:{" "}
-                            </Typography>
-                          </Container>
-                        </CardContent>
-                      </Grid>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        className={classes.root}
+      >
+        {data.map((item) => {
+          return (
+            <Box className={classes.box}>
+              <Box className={classes.container}>
+                <Avatar style={{ paddingTop: "5px" }} imgProps={defaultpic} />
+                <Box className={classes.details}>
+                  <Typography variant="h6">{item.name}: </Typography>
+                  <Typography variant="subtitle1">5h ago: </Typography>
+                </Box>
+              </Box>
 
-                      <Grid item xs={12}>
-                        <Container className={classes.container}>
-                          <Card className={classes.details}>
-                            <Typography variant="button">
-                              {" "}
-                              {item.liftName}
-                            </Typography>
-                          </Card>
-
-                          <Card content className={classes.details}>
-                            <Typography variant="button">
-                              {item.weight} lbs
-                            </Typography>
-                          </Card>
-
-                          <Card content className={classes.details}>
-                            <Typography variant="button">
-                              {" "}
-                              {item.reps} REPS
-                            </Typography>
-                          </Card>
-
-                          <Card content className={classes.details}>
-                            <Typography variant="button">
-                              {" "}
-                              RPE {item.rpe}
-                            </Typography>
-                          </Card>
-                        </Container>
-                      </Grid>
-                    </Grid>
-                  </Card>
-                </Grid>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Grid>
+              <Box className={classes.container}>
+                <Typography className={classes.name}>
+                  {" "}
+                  {`${item.weight}Lb`}
+                </Typography>
+                <Typography className={classes.name}>
+                  {" "}
+                  {`${item.liftName}`}
+                </Typography>
+                <Typography className={classes.name}>
+                  {" "}
+                  {`X ${item.reps} Reps`}
+                </Typography>
+                <Typography className={classes.name}>
+                  {" "}
+                  {`@ RPE ${item.rpe}`}
+                </Typography>
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
     );
   }
 };

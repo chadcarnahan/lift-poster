@@ -4,38 +4,36 @@ import { makeStyles } from "@material-ui/styles";
 const useStyles = makeStyles((theme, colorMode) => ({
   root: {
     display: "flex",
-    flexWrap: "wrap",
-    border: "1px RGB(149, 152, 157, 0.25)solid",
+    borderBottom: "1px RGB(149, 152, 157, 0.25)solid",
     padding: "20px",
-    color: theme.palette.text.secondary,
+    maxWidth: "500px",
+    color: theme.palette.text.primary,
     justifyContent: "center",
     "& .MuiInputBase-root": {
       height: 50,
-      width: "95%",
-      fontSize: "1em",
+      width: "100%",
+      fontSize: "1rem",
     },
     "& .MuiFormLabel-root": {
       width: "90%",
-      fontSize: "1em",
+      fontSize: "1rem",
     },
     "& .MuiTypography-root": {
       width: "50%",
-      fontSize: "1em",
+      fontSize: "1rem",
     },
   },
 
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: "20%",
+    width: "47.5%",
   },
   textBox: {
-    width: "30%",
+    width: "47.5%",
     marginBottom: theme.spacing(1),
   },
 
   textEnd: {
-    width: "20%",
+    width: "47.5%",
   },
   button: {
     marginTop: "10px",

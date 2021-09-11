@@ -9,8 +9,10 @@ import { CssBaseline } from "@material-ui/core";
 import LiftPosting from "./dashboard-components/LiftPosting";
 import Feed from "./dashboard-components/Feed";
 import { fetchPosts } from "./firebase";
-import { Grid, AppBar, Toolbar } from "@material-ui/core";
+import { Grid, Container, Box, AppBar, Toolbar } from "@material-ui/core";
 import { makeStyles, IconButton, Typography, Button } from "@material-ui/core";
+import GridBase from "@material-ui/core/Grid";
+import { styled } from "@material-ui/styles";
 
 function Dashboard() {
   const [fontColor, setFontColor] = useState("#B0B3B8");
@@ -34,16 +36,21 @@ function Dashboard() {
   const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
-      display: "flex",
-      justifyContent: "flex-end",
+      marginRight: "0",
     },
     menuButton: {
-      marginRight: theme.spacing(2),
+      paddingRight: theme.spacing(2),
     },
     title: {
       flexGrow: 1,
     },
   }));
+
+  const Grid = styled(GridBase)`
+    .MuiGrid-root {
+      flex-grow: 1;
+    }
+  `;
 
   const classes = useStyles();
   useEffect(() => {
@@ -55,54 +62,76 @@ function Dashboard() {
   if (!loading) {
     return (
       <ThemeProvider theme={theme}>
-        <AppBar position="static" className={classes.root}>
-          <Toolbar>
-            <Button onClick={() => logout} color="inherit">
-              Logout
-            </Button>
-            <Button
-              onClick={() =>
-                colorMode === "dark"
-                  ? setColorMode("light")
-                  : setColorMode("dark")
-              }
-              color="inherit"
-            >
-              {" "}
-              Dark Mode
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <CssBaseline />
-          <Grid item>
-            <h2>Home</h2>
-          </Grid>
-          <Grid item xs={8}>
-            <LiftPosting
-              user={user}
-              name={name.name}
-              fontColor={fontColor}
-              colorMode={colorMode}
-              feedUpdate={feedUpdate}
-              setFeedUpdate={setFeedUpdate}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <h2>News Feed</h2>
-          </Grid>
-          <Grid item xs={12}>
-            <Feed user={user} data={data} load={load} />
-          </Grid>
-          {/* <button className="dashboard__btn" onClick={logout}>
+        <CssBaseline />
+        <div className={classes.root}>
+          <Grid container width={1} margin="none" justifyContent="center">
+            <Grid item xs={12}>
+              <AppBar position="static">
+                <Toolbar>
+                  <Typography variant="h6" className={classes.title}>
+                    Home
+                  </Typography>
+                  <Button onClick={() => logout()} color="inherit">
+                    Logout
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      colorMode === "dark"
+                        ? setColorMode("light")
+                        : setColorMode("dark")
+                    }
+                    color="inherit"
+                  >
+                    {" "}
+                    Dark Mode
+                  </Button>
+                </Toolbar>
+              </AppBar>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Box
+                  width={1}
+                  style={{
+                    maxWidth: "500px",
+                    border: "1px RGB(149, 152, 157, 0.25)solid",
+                  }}
+                  display="flex"
+                  justifyContent="center"
+                  flexDirection="column"
+                >
+                  <LiftPosting
+                    user={user}
+                    name={name.name}
+                    fontColor={fontColor}
+                    colorMode={colorMode}
+                    feedUpdate={feedUpdate}
+                    setFeedUpdate={setFeedUpdate}
+                  />
+
+                  <Box
+                    display="flex"
+                    textAlign="center"
+                    justifyContent="center"
+                  >
+                    <Typography variant="h2">News Feed</Typography>
+                  </Box>
+
+                  <Feed user={user} data={data} load={load} />
+                </Box>
+              </Box>
+            </Grid>
+
+            {/* <button className="dashboard__btn" onClick={logout}>
           Logout
         </button> */}
-          {/* <button
+            {/* <button
               className="btn"
               onClick={() =>
                 colorMode === "dark"
@@ -112,7 +141,8 @@ function Dashboard() {
             >
               change theme
             </button> */}
-        </Grid>
+          </Grid>
+        </div>
       </ThemeProvider>
     );
   } else {
