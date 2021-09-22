@@ -23,3 +23,19 @@
   width: 100%;
   height: 1px;
 }
+
+a:-webkit-any-link {
+  text-decoration: none;
+  color: inherit;
+  width: "100%";
+}
+
+.view-post {
+  background-color: black;
+  padding: 14px;
+  height: auto;
+}
+
+.dashboard-back {
+  margin-left: "2rem";
+}

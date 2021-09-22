@@ -2,36 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from "react-router";
 import "./Dashboard.css";
+import { ViewPosts } from "./dashboard-components/ViewPost";
 import { ThemeProvider } from "@material-ui/styles";
 import { auth, db, logout, fetchUserName } from "./firebase";
 import LiftPosting from "./dashboard-components/LiftPosting";
 import Feed from "./dashboard-components/Feed";
+import GridBase from "@material-ui/core/Grid";
+import { styled } from "@material-ui/styles";
 import {
   createTheme,
   Box,
   CssBaseline,
-  Typography,
   AppBar,
   Toolbar,
   makeStyles,
+  Typography,
   Button,
 } from "@material-ui/core";
-import GridBase from "@material-ui/core/Grid";
-import { styled } from "@material-ui/styles";
 
-function Dashboard({ posts, setPosts }) {
-  const [fontColor, setFontColor] = useState("#B0B3B8");
+function Dashview() {
   const [user, loading, error] = useAuthState(auth);
-  const [colorMode, setColorMode] = useState("dark");
   const [name, setName] = useState({ name: "", email: "" });
-  const [feedUpdate, setFeedUpdate] = useState(false);
   const history = useHistory();
-  const theme = createTheme({
-    palette: {
-      type: colorMode,
-    },
-  });
-
+  const [posts, setPosts] = useState([]);
   useEffect(() => {
     db.collection("posts").onSnapshot((snapshot) =>
       setPosts(
@@ -39,6 +32,18 @@ function Dashboard({ posts, setPosts }) {
       )
     );
   }, []);
+  useEffect(() => {
+    if (loading) return;
+    if (!user) return history.replace("/");
+    fetchUserName(setName, user);
+  }, [loading, user]);
+  const [fontColor, setFontColor] = useState("#B0B3B8");
+  const [colorMode, setColorMode] = useState("dark");
+  const theme = createTheme({
+    palette: {
+      type: colorMode,
+    },
+  });
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,13 +63,7 @@ function Dashboard({ posts, setPosts }) {
       flex-grow: 1;
     }
   `;
-
   const classes = useStyles();
-  useEffect(() => {
-    if (loading) return;
-    if (!user) return history.replace("/");
-    fetchUserName(setName, user);
-  }, [loading, user]);
 
   if (!loading) {
     return (
@@ -96,7 +95,7 @@ function Dashboard({ posts, setPosts }) {
               </AppBar>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid itema xs={12}>
               <Box
                 display="flex"
                 flexDirection="column"
@@ -118,8 +117,6 @@ function Dashboard({ posts, setPosts }) {
                     name={name.name}
                     fontColor={fontColor}
                     colorMode={colorMode}
-                    feedUpdate={feedUpdate}
-                    setFeedUpdate={setFeedUpdate}
                   />
                   <Feed user={user} loading={loading} posts={posts} />
                 </Box>
@@ -137,4 +134,4 @@ function Dashboard({ posts, setPosts }) {
     );
   }
 }
-export default Dashboard;
+export default Dashview;

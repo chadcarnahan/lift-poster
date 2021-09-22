@@ -1,12 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { Container, Grid, Typography, Avatar, Box } from "@material-ui/core";
-import { Paper, Card, CardContent, CardHeader } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core";
-import defaultpic from "../defaultpic.jpeg";
+import UserPosts from "./UserPosts";
+import { makeStyles, Box } from "@material-ui/core";
 import "./feed.css";
 
-const Feed = ({ user, data, load, loading }) => {
+const Feed = ({ user, posts }) => {
   const useStyles = makeStyles((theme) => ({
     root: {
       color: theme.palette.text.secondary,
@@ -16,12 +13,7 @@ const Feed = ({ user, data, load, loading }) => {
     },
 
     name: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "flex-start",
-      alignContent: "center",
-      paddingRight: "10px",
-      fontSize: "20px",
+      fontSize: "1rem",
     },
 
     details: {
@@ -44,60 +36,36 @@ const Feed = ({ user, data, load, loading }) => {
       width: "100%",
       padding: "12px",
       justifyContent: "center",
-
       border: "1px RGB(149, 152, 157, 0.25)solid",
     },
   }));
   const classes = useStyles();
 
-  if (!loading) {
-    console.log(data);
-  }
-  if (load) {
-    return <h1>loading</h1>;
-  } else {
-    return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        className={classes.root}
-      >
-        {data.map((item) => {
-          return (
-            <Box className={classes.box}>
-              <Box className={classes.container}>
-                <Avatar style={{ paddingTop: "5px" }} imgProps={defaultpic} />
-                <Box className={classes.details}>
-                  <Typography variant="h6">{item.name}: </Typography>
-                  <Typography variant="subtitle1">5h ago: </Typography>
-                </Box>
-              </Box>
-
-              <Box className={classes.container}>
-                <Typography className={classes.name}>
-                  {" "}
-                  {`${item.weight}Lb`}
-                </Typography>
-                <Typography className={classes.name}>
-                  {" "}
-                  {`${item.liftName}`}
-                </Typography>
-                <Typography className={classes.name}>
-                  {" "}
-                  {`X ${item.reps} Reps`}
-                </Typography>
-                <Typography className={classes.name}>
-                  {" "}
-                  {`@ RPE ${item.rpe}`}
-                </Typography>
-              </Box>
-            </Box>
-          );
-        })}
-      </Box>
-    );
-  }
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      className={classes.root}
+    >
+      {posts.map(
+        ({ description, liftName, likes, name, reps, rpe, weight, id }) => (
+          <UserPosts
+            key={id}
+            description={description}
+            weight={weight}
+            liftName={liftName}
+            name={name}
+            reps={reps}
+            rpe={rpe}
+            likes={likes}
+            user={user}
+            id={id}
+          />
+        )
+      )}
+    </Box>
+  );
 };
 
 export default Feed;

@@ -1,3 +1,4 @@
+import { Unsubscribe } from "@material-ui/icons";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -83,10 +84,26 @@ const newPost = async (
       weight,
       reps,
       rpe,
+      likes: [],
+      comments: [],
     });
   } catch (err) {
     console.error(err);
     alert(err.message);
+  }
+};
+
+const newComment = async (id, userID, comment, name, replyingTo) => {
+  try {
+    await db.collection("posts").doc(id).collection("comments").add({
+      comment,
+      userID,
+      name,
+      replyingTo,
+      likes: [],
+    });
+  } catch (err) {
+    console.error(err);
   }
 };
 
@@ -101,7 +118,15 @@ const sendPasswordResetEmail = async (email) => {
 };
 
 const logout = () => {
-  auth.signOut();
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      // Sign-out successful.
+    })
+    .catch((error) => {
+      console.err(error);
+    });
 };
 
 const fetchUserName = async (setName, user) => {
@@ -123,7 +148,7 @@ const fetchPosts = async (setData, setLoad) => {
   try {
     const query = await db.collection("posts").get();
     await query.docs.map((item) => {
-      list.push(item.data());
+      list.push(Object.assign({ id: item.id }, item.data()));
     });
 
     await setData(list);
@@ -134,9 +159,64 @@ const fetchPosts = async (setData, setLoad) => {
   }
 };
 
+const pushLikes = async (id, value) => {
+  const postRef = db.collection("posts").doc(id);
+  postRef.update({
+    likes: firebase.firestore.FieldValue.arrayUnion(value),
+  });
+};
+
+const pushLikesOnComment = async (id, value, commentID) => {
+  const postRef = db
+    .collection("posts")
+    .doc(id)
+    .collection("comments")
+    .doc(commentID);
+  postRef.update({
+    likes: firebase.firestore.FieldValue.arrayUnion(value),
+  });
+};
+const removeLikesOnComment = async (id, value, commentID) => {
+  const postRef = db
+    .collection("posts")
+    .doc(id)
+    .collection("comments")
+    .doc(commentID);
+  postRef.update({
+    likes: firebase.firestore.FieldValue.arrayRemove(value),
+  });
+};
+
+const pushComments = async (id, value) => {
+  const postRef = db.collection("posts").doc(id);
+  postRef.update({
+    comments: firebase.firestore.FieldValue.arrayUnion(value),
+  });
+};
+
+const removeLikes = async (id, value) => {
+  const postRef = db.collection("posts").doc(id);
+  postRef.update({
+    likes: firebase.firestore.FieldValue.arrayRemove(value),
+  });
+};
+
+const getSinglePost = (id, setPost) => {
+  try {
+    db.collection("posts")
+      .doc(id)
+      .onSnapshot((doc) => {
+        setPost(doc.data().likes);
+      });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export {
   auth,
   db,
+  app,
   signInWithGoogle,
   signInWithEmailAndPassword,
   registerWithEmailAndPassword,
@@ -145,4 +225,11 @@ export {
   fetchUserName,
   newPost,
   fetchPosts,
+  pushLikes,
+  removeLikes,
+  getSinglePost,
+  pushComments,
+  newComment,
+  pushLikesOnComment,
+  removeLikesOnComment,
 };
